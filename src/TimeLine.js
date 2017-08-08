@@ -98,6 +98,11 @@ class TimeLine extends Component {
       })
       .attr('cy', chartHeight / 2)
 
+    plotArea.selectAll('circle')
+      .on('mouseover', d => {
+        console.log(d.properties)
+      })
+
   }
 
   render() {
