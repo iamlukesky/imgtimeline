@@ -49,6 +49,7 @@ class TimeLine extends Component {
       .range([margin, chartWidth - margin])
 
     xAxis = axisBottom(xScale)
+      .tickSizeOuter(0)
 
     select(node)
       .attr('width', width)
@@ -96,7 +97,7 @@ class TimeLine extends Component {
       .attr('cx', d => {
         return xScale(d.properties['system:time_start'])
       })
-      .attr('cy', chartHeight / 2)
+      .attr('cy', (chartHeight / 2) - 10)
 
     plotArea.selectAll('circle')
       .on('mouseover', d => {
