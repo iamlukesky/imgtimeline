@@ -20,10 +20,28 @@ class TimeLine extends Component {
 
     let data = this.props.data
 
+    console.log(data)
+    let dates = []
+
     data.forEach(d => {
-      const time_start = d.properties['system:time_start']
-      d.properties['system:time_start'] = new Date(time_start)
+      const time_start = new Date(d.properties['system:time_start'])
+      d.properties['system:time_start'] = time_start
+
+      const time_startString = time_start.toISOString().slice(0, 10);
+      let baseDate = dates.find(item => { return item.getTime() === new Date(time_startString).getTime() })
+      if (!baseDate) {
+        baseDate = new Date(time_startString)
+        baseDate.images = [d]
+        dates.push(baseDate)
+      } else {
+        baseDate.images.push(d)
+      }
+
+      d.dateIndex = baseDate.images.length
+
     })
+
+    console.log(dates)
 
     let node = this.node,
       width = node.parentNode.clientWidth,
@@ -97,7 +115,10 @@ class TimeLine extends Component {
       .attr('cx', d => {
         return xScale(d.properties['system:time_start'])
       })
-      .attr('cy', (chartHeight / 2) - 10)
+      .attr('cy', d => {
+        return (chartHeight / 2) - (5 + 15 * d.dateIndex)
+      })
+      // .attr('cy', (chartHeight / 2) - 10 * )
 
     plotArea.selectAll('circle')
       .on('mouseover', d => {
